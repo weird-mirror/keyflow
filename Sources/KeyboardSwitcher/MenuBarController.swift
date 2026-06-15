@@ -45,6 +45,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         axItem.isEnabled = false
         menu.addItem(axItem)
 
+        if state.secureInputActive {
+            let warn = NSMenuItem(
+                title: "⚠︎ Secure Keyboard Entry is blocking input",
+                action: #selector(showSettings), keyEquivalent: ""
+            )
+            warn.target = self
+            menu.addItem(warn)
+        }
+
         menu.addItem(.separator())
 
         let prefs = NSMenuItem(title: "Settings…", action: #selector(showSettings), keyEquivalent: ",")

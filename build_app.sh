@@ -106,7 +106,20 @@ for name in en ru ua; do
 done
 
 # Sign so macOS can identify the bundle for TCC/Accessibility.
-codesign --force --deep --sign - "$APP_PATH"
+# A STABLE signing identity is critical: ad-hoc signatures change their cdhash
+# on every build, which makes macOS silently revoke the Accessibility grant
+# (the recurring "stopped working after rebuild" bug). Signing with a fixed
+# self-signed cert keeps the designated requirement constant, so the grant
+# persists across rebuilds and updates. Falls back to ad-hoc if the cert is
+# absent (e.g. building on another machine).
+SIGN_IDENTITY="KeyFlow Self-Signed"
+if security find-identity -p codesigning 2>/dev/null | grep -q "$SIGN_IDENTITY"; then
+    echo "Signing with stable identity: $SIGN_IDENTITY"
+    codesign --force --deep --sign "$SIGN_IDENTITY" "$APP_PATH"
+else
+    echo "WARNING: '$SIGN_IDENTITY' not found — falling back to ad-hoc (Accessibility will break on rebuild)"
+    codesign --force --deep --sign - "$APP_PATH"
+fi
 
 # Build DMG with drag-to-Applications layout.
 echo "Building $DMG_PATH..."

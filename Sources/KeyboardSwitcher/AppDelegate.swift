@@ -6,6 +6,7 @@ import Foundation
 final class AppState: ObservableObject {
     @Published var settings: Settings
     @Published var axGranted: Bool
+    @Published var secureInputActive: Bool = false
 
     let exceptions: ExceptionsStore
     var coordinator: Coordinator?
@@ -66,6 +67,11 @@ final class AppState: ObservableObject {
         axGranted = AppContext.hasAccessibilityPermission(prompt: false)
     }
 
+    func refreshSecureInput() {
+        let now = AppContext.isSecureInputActive()
+        if now != secureInputActive { secureInputActive = now }
+    }
+
     func requestAXPermission() {
         _ = AppContext.hasAccessibilityPermission(prompt: true)
     }
@@ -110,6 +116,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(state.settings.showInDock ? .regular : .accessory)
+        state.refreshSecureInput()
 
         let dicts = loadBundledDicts()
         let detector = LayoutDetector(
@@ -151,6 +158,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             if self.state.axGranted {
                 self.state.tap?.rearmIfNeeded()
             }
+            // Secure Keyboard Entry hides typing from our tap — surface it.
+            self.state.refreshSecureInput()
         }
     }
 

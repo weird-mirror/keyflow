@@ -9,7 +9,8 @@ final class SettingsWindowController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        window.title = "KeyFlow"
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        window.title = version.map { "KeyFlow \($0)" } ?? "KeyFlow"
         window.center()
         window.isReleasedWhenClosed = false
         let hosting = NSHostingView(rootView: SettingsView(state: state))
@@ -30,6 +31,10 @@ private struct SettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 axStatus
+                if state.secureInputActive {
+                    Divider()
+                    secureInputWarning
+                }
                 Divider()
                 enabledSection
                 Divider()
@@ -84,6 +89,23 @@ private struct SettingsView: View {
             }
             .font(.subheadline)
         }
+    }
+
+    private var secureInputWarning: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: "lock.trianglebadge.exclamationmark.fill")
+                    .foregroundColor(.orange)
+                Text("Secure Keyboard Entry is active").font(.headline)
+            }
+            Text("Some app is using macOS Secure Keyboard Entry, which hides your typing from KeyFlow (and every other layout switcher). KeyFlow can't correct anything until it's turned off.")
+                .font(.caption).foregroundColor(.secondary)
+            Text("Most often this is Terminal or iTerm: open that app's menu and uncheck “Secure Keyboard Entry”. A password field in a browser can also enable it temporarily.")
+                .font(.caption).foregroundColor(.secondary)
+        }
+        .padding(10)
+        .background(Color.orange.opacity(0.12))
+        .cornerRadius(8)
     }
 
     private var enabledSection: some View {

@@ -1,7 +1,16 @@
 import AppKit
 import ApplicationServices
+import Carbon
 
 enum AppContext {
+    // True when Secure Keyboard Entry is active anywhere in the session. While
+    // it's on, macOS withholds keyDown events from ALL event taps (ours
+    // included), so KeyFlow silently can't see typing. The usual culprit is
+    // Terminal or iTerm with "Secure Keyboard Entry" enabled in their menu.
+    static func isSecureInputActive() -> Bool {
+        return IsSecureEventInputEnabled()
+    }
+
     static func frontmostBundleID() -> String? {
         NSWorkspace.shared.frontmostApplication?.bundleIdentifier
     }
