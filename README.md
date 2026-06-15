@@ -2,9 +2,9 @@
 
 Automatic keyboard layout switcher for macOS.
 Type without thinking about whether the Cyrillic or Latin layout is active —
-KeyFlow notices the moment you press space and fixes the word for you.
+KeyFlow fixes the word as you type, mid-word, before you even reach space.
 
-Supports **English**, **Russian** and **Ukrainian**.
+Supports **English**, **Ukrainian** and **Russian**.
 
 > Local-first. Open-source. No cloud, no telemetry, no analytics.
 > Your keystrokes never leave your Mac.
@@ -18,17 +18,22 @@ is still in English and you're staring at `ghbdtn` instead of `привет`.
 Backspace, switch layout, retype. Many times a day.
 
 KeyFlow detects the wrong-layout situation by looking up the typed sequence in
-three dictionaries (en / ru / ua) at every word boundary. If the word doesn't
-exist in the active layout's language but its key-position translation does in
-another, KeyFlow rewrites the word and flips the keyboard layout for you.
+three dictionaries (en / ru / ua). It works two ways: **live**, mid-word — as
+soon as the first few characters can only be a real word in another layout, it
+switches immediately; and at the **word boundary** (space, punctuation, Enter)
+as a fallback. If the word doesn't exist in the active layout's language but its
+key-position translation does in another, KeyFlow rewrites the word and flips
+the keyboard layout for you.
 
 It also gives you a single-key manual override (tap `⌘ Cmd` alone) to cycle the
 last word through the three layouts when the detector is unsure.
 
 ## Features
 
-- Auto-correction on space, punctuation or Enter — no UI prompt, just the
-  right word in the right layout
+- **Live correction** — switches mid-word (after a few characters) once the
+  layout is unambiguous, no need to wait for space
+- Auto-correction on space, punctuation or Enter as a fallback — no UI prompt,
+  just the right word in the right layout
 - Three layouts in one cycle: en → ru → ua
 - Single-tap manual conversion (default: ⌘ Cmd alone, configurable)
 - Per-app **blacklist** — autocorrect everywhere except where you don't want it
@@ -79,6 +84,8 @@ both produce the same six key presses; KeyFlow knows how to round-trip those.
 ## Settings overview
 
 - **Autocorrect on space / punctuation** — master switch.
+- **Live correction** — switch mid-word after N characters (default 3); turn off
+  to only correct at word boundaries.
 - **Active layouts** — per-layout checkboxes; the cycle and detector ignore
   disabled ones.
 - **Manual hotkey** — tap-modifier picker (Cmd / Opt / Ctrl / Shift).

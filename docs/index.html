@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KeyFlow — automatic keyboard layout switcher for macOS</title>
-<meta name="description" content="KeyFlow fixes wrong-layout typing the moment you press space. English, Russian, Ukrainian. Local-first, open-source, no cloud, no telemetry.">
+<meta name="description" content="KeyFlow fixes wrong-layout typing as you type — mid-word, before you even reach space. English, Ukrainian, Russian. Local-first, open-source, no cloud, no telemetry.">
 <meta property="og:title" content="KeyFlow — keyboard that thinks for you">
 <meta property="og:description" content="Type without worrying about the layout. en / ru / ua. Local-first, open-source, no cloud.">
 <meta property="og:type" content="website">
@@ -34,9 +34,9 @@
   h1 { font-size: 52px; letter-spacing: -1.5px; margin-bottom: 14px; }
   .tagline { font-size: 22px; color: var(--muted); margin-bottom: 14px; }
   .sub { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto 36px; }
-  .langs { display: inline-flex; gap: 8px; margin-bottom: 36px; }
+  .langs { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; }
   .lang { padding: 6px 16px; border: 1px solid var(--border); border-radius: 999px; font-size: 14px; color: var(--text); background: var(--card); }
-  .cta { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 14px 28px; border-radius: 14px; font-size: 16px; font-weight: 600;
@@ -45,6 +45,7 @@
   .btn:hover { transform: translateY(-2px); }
   .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 10px 30px rgba(124,92,255,.35); }
   .btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-coffee { background: linear-gradient(135deg, var(--accent), #2ee6a0); color: #fff; box-shadow: 0 10px 30px rgba(46,230,160,.3); }
   .demo { text-align: center; margin: 24px 0 8px; font-size: 15px; color: var(--muted); }
   .demo code { background: var(--card); padding: 3px 10px; border-radius: 8px; color: var(--accent2); font-size: 15px; }
   .arrow { color: var(--accent); margin: 0 8px; }
@@ -72,14 +73,17 @@
     <img src="icon.png" alt="KeyFlow" class="logo">
     <h1>KeyFlow</h1>
     <p class="tagline">The keyboard that thinks for you.</p>
-    <p class="sub">Type a word in the wrong layout and KeyFlow fixes it the instant you hit space — and switches the layout so you keep going. No more <code>ghbdtn</code> instead of привіт.</p>
+    <p class="sub">Start a word in the wrong layout and KeyFlow fixes it on the fly — switching the layout as you type, so you just keep going. No more <code>ghbdtn</code> instead of привіт.</p>
     <div class="langs">
       <span class="lang">English</span>
-      <span class="lang">Русский</span>
       <span class="lang">Українська</span>
+      <span class="lang">Русский</span>
     </div>
     <div class="cta">
-      <a class="btn btn-primary" href="#download">Download for macOS</a>
+      <a class="btn btn-primary" href="https://github.com/weird-mirror/keyflow/releases/latest/download/KeyFlow.dmg">Download for macOS</a>
+      <a class="btn btn-coffee" href="https://buymeacoffee.com/weird_mirror">☕ Support the project</a>
+    </div>
+    <div class="cta" style="margin-top:14px;">
       <a class="btn btn-ghost" href="https://github.com/weird-mirror/keyflow">View source on GitHub</a>
     </div>
     <p class="note">macOS 13+ · Apple Silicon &amp; Intel · Free &amp; open-source</p>
@@ -94,7 +98,7 @@
     <div class="grid">
       <div class="feature">
         <h3>⚡ Auto-fix on the fly</h3>
-        <p>Corrects wrong-layout words as you type — at the space, or even mid-word once it's clear.</p>
+        <p>Fixes wrong-layout words mid-word as you type — the moment the layout is clear, before you reach space.</p>
       </div>
       <div class="feature">
         <h3>🔁 One-tap switch</h3>
@@ -133,7 +137,7 @@
   <section id="download" style="text-align:center;">
     <h2>Download</h2>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/weird-mirror/keyflow/releases/latest">Download KeyFlow.dmg</a>
+      <a class="btn btn-primary" href="https://github.com/weird-mirror/keyflow/releases/latest/download/KeyFlow.dmg">Download KeyFlow.dmg</a>
     </div>
     <p class="note">Open the DMG, drag KeyFlow to Applications, grant Accessibility on first launch.</p>
   </section>
@@ -148,7 +152,6 @@
 
   <footer>
     <p>KeyFlow · open-source under the MIT license · <a href="https://github.com/weird-mirror/keyflow">GitHub</a></p>
-    <p class="note">Not affiliated with Punto Switcher or Caramba Switcher.</p>
   </footer>
 
 </div>
