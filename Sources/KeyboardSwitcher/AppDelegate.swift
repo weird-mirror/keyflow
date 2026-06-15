@@ -159,7 +159,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self.state.tap?.rearmIfNeeded()
             }
             // Secure Keyboard Entry hides typing from our tap — surface it.
+            let wasSecure = self.state.secureInputActive
             self.state.refreshSecureInput()
+            if wasSecure != self.state.secureInputActive {
+                self.menuBar?.refreshIcon()
+            }
         }
     }
 

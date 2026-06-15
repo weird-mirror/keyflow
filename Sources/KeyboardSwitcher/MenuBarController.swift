@@ -13,13 +13,32 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         self.menu = NSMenu()
         super.init()
 
-        if let button = statusItem.button {
-            button.title = "⌥"
-            button.toolTip = "KeyFlow"
-        }
         menu.delegate = self
         statusItem.menu = menu
         populate(menu)
+        refreshIcon()
+    }
+
+    // Reflect the blocking state directly in the menu-bar icon so the user
+    // notices without opening the menu: a red warning triangle when Secure
+    // Keyboard Entry is hiding input, the normal glyph otherwise.
+    func refreshIcon() {
+        guard let button = statusItem.button else { return }
+        if state.secureInputActive {
+            let cfg = NSImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+                .applying(.init(paletteColors: [.systemOrange]))
+            let img = NSImage(systemSymbolName: "exclamationmark.circle.fill",
+                              accessibilityDescription: "Secure Keyboard Entry is blocking KeyFlow")?
+                .withSymbolConfiguration(cfg)
+            img?.isTemplate = false
+            button.image = img
+            button.title = ""
+            button.toolTip = "Secure Keyboard Entry is blocking KeyFlow — click for details"
+        } else {
+            button.image = nil
+            button.title = "⌥"
+            button.toolTip = "KeyFlow"
+        }
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {

@@ -39,6 +39,8 @@ last word through the three layouts when the detector is unsure.
 - Per-app **blacklist** — autocorrect everywhere except where you don't want it
 - Word **exceptions** — list of words to leave alone
 - **Password field detection** — never touches input in `AXSecureTextField`
+- **Secure Keyboard Entry warning** — menu-bar icon turns orange when another
+  app is hiding your typing, instead of failing silently
 - **Launch at login** toggle
 - **Show in Dock** toggle (menu bar only or full Dock presence)
 - Self-contained `.app` bundle with built-in dictionaries
@@ -46,8 +48,9 @@ last word through the three layouts when the detector is unsure.
 
 ## Installation
 
-1. Download `KeyFlow-<version>.dmg` from the [Releases page]() *(coming once
-   tagged)* or build it yourself (see below).
+1. Download `KeyFlow.dmg` from the
+   [latest release](https://github.com/weird-mirror/keyflow/releases/latest)
+   or build it yourself (see below).
 2. Open the DMG and drag `KeyFlow.app` into `Applications`.
 3. Launch from Spotlight (`⌘ Space → "KeyFlow"`).
 4. On first launch macOS will prompt for **Accessibility** permission —
@@ -99,6 +102,28 @@ both produce the same six key presses; KeyFlow knows how to round-trip those.
 
 All settings are stored in
 `~/Library/Application Support/KeyFlow/settings.json`.
+
+## Troubleshooting
+
+**KeyFlow isn't correcting anything / the menu-bar icon shows an orange (!)**
+
+Some app has turned on macOS **Secure Keyboard Entry**. While it's active, the
+system hides every keystroke from all event taps — KeyFlow (and any other
+layout switcher) goes blind, even though tapping the modifier still switches the
+layout. The icon turns into an orange exclamation mark when this happens.
+
+The usual culprit is **Terminal** or **iTerm** with *Secure Keyboard Entry*
+enabled in their menu — turn it off there (Terminal → uncheck *Secure Keyboard
+Entry*). A focused password field in a browser can also enable it temporarily.
+
+**KeyFlow stopped working after I rebuilt / updated it**
+
+KeyFlow signs its builds with a stable self-signed certificate so the macOS
+Accessibility grant survives updates. If you build from source on a machine
+without that certificate, the build falls back to ad-hoc signing, whose
+signature changes every build and silently revokes the Accessibility grant —
+re-grant it in *System Settings → Privacy & Security → Accessibility*, or create
+a stable signing identity (see `build_app.sh`).
 
 ## Privacy
 
