@@ -1,5 +1,8 @@
 # KeyFlow
 
+**Website:** [weird-mirror.github.io/keyflow](https://weird-mirror.github.io/keyflow/) ·
+**Download:** [latest release](https://github.com/weird-mirror/keyflow/releases/latest)
+
 Automatic keyboard layout switcher for macOS.
 Type without thinking about whether the Cyrillic or Latin layout is active —
 KeyFlow fixes the word as you type, mid-word, before you even reach space.
