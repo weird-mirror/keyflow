@@ -13,6 +13,11 @@ final class EventTap {
     private var runLoopSource: CFRunLoopSource?
     private let handler: Handler
 
+    // Called when the tap is disabled by the system (timeout / user input) and
+    // re-enabled. Keystrokes were dropped while it was off, so the owner should
+    // discard any partial word buffer to avoid acting on stale input.
+    var onTapDisabled: (() -> Void)?
+
     init(handler: @escaping Handler) {
         self.handler = handler
     }
@@ -35,6 +40,7 @@ final class EventTap {
                 let me = Unmanaged<EventTap>.fromOpaque(refcon).takeUnretainedValue()
                 if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
                     if let t = me.tap { CGEvent.tapEnable(tap: t, enable: true) }
+                    me.onTapDisabled?()
                     return Unmanaged.passUnretained(event)
                 }
                 if let out = me.handler(event, type) {
@@ -53,6 +59,17 @@ final class EventTap {
         CGEvent.tapEnable(tap: tap, enable: true)
         self.tap = tap
         self.runLoopSource = source
+    }
+
+    // Re-enable the tap if the system disabled it while no event came through to
+    // trigger the inline re-enable. Called periodically by the app watchdog so a
+    // dropped tap never silently stays dead.
+    func rearmIfNeeded() {
+        guard let tap else { return }
+        if !CGEvent.tapIsEnabled(tap: tap) {
+            CGEvent.tapEnable(tap: tap, enable: true)
+            onTapDisabled?()
+        }
     }
 
     func stop() {

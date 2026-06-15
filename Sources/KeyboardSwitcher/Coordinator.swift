@@ -6,6 +6,7 @@ final class Coordinator {
     private let detector: LayoutDetector
     private let exceptions: ExceptionsStore
     private var settings: Settings
+    private let focus = FocusContext()
 
     private struct CompletedWord {
         let text: String
@@ -28,6 +29,14 @@ final class Coordinator {
         self.settings = settings
     }
 
+    // Called when the event tap was disabled and re-enabled by the system —
+    // keystrokes were lost, so the buffer is unreliable and must be cleared.
+    func resetBuffer() {
+        buffer.reset()
+        lastCompletedWord = nil
+        modifierTapStart = nil
+    }
+
     func handle(event: CGEvent, type: CGEventType) -> CGEvent? {
         if Replayer.isSynthetic(event) { return event }
 
@@ -36,6 +45,7 @@ final class Coordinator {
             buffer.reset()
             lastCompletedWord = nil
             modifierTapStart = nil
+            focus.invalidateSecure() // a click can move focus into/out of a secure field
             return event
         case .flagsChanged:
             handleFlagsChanged(event)
@@ -64,8 +74,7 @@ final class Coordinator {
         defer { lastFlags = event.flags }
         guard let modName = settings.tapModifier, let target = maskFor(modName) else { return }
 
-        let bundleID = AppContext.frontmostBundleID()
-        guard settings.appAllowed(bundleID) else {
+        guard settings.appAllowed(focus.bundleID) else {
             modifierTapStart = nil
             return
         }
@@ -95,20 +104,23 @@ final class Coordinator {
     private func handleKeyDown(_ event: CGEvent) -> CGEvent? {
         guard settings.enabled else { return event }
 
-        let bundleID = AppContext.frontmostBundleID()
-        guard settings.appAllowed(bundleID) else {
-            buffer.reset()
-            lastCompletedWord = nil
-            return event
-        }
-
-        if settings.skipSecureFields && AppContext.isFocusedFieldSecure() {
+        guard settings.appAllowed(focus.bundleID) else {
             buffer.reset()
             lastCompletedWord = nil
             return event
         }
 
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+
+        // Tab moves focus between fields — the next secure-field check must re-query.
+        if keyCode == 48 { focus.invalidateSecure() }
+
+        if settings.skipSecureFields && focus.isFocusedFieldSecure() {
+            buffer.reset()
+            lastCompletedWord = nil
+            return event
+        }
+
         let flags = event.flags
         let hasCmd = flags.contains(.maskCommand)
         let hasCtrl = flags.contains(.maskControl)

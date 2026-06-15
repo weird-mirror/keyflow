@@ -15,7 +15,7 @@ esac
 
 APP_NAME="KeyFlow"
 BUNDLE_ID="com.keyflow.app"
-VERSION="0.3.0"
+VERSION="0.3.1"
 
 OUT_DIR=".build/app"
 APP_PATH="$OUT_DIR/$APP_NAME.app"
@@ -34,6 +34,7 @@ SRC=(
     Sources/KeyboardSwitcher/LayoutDetector.swift
     Sources/KeyboardSwitcher/WordBuffer.swift
     Sources/KeyboardSwitcher/AppContext.swift
+    Sources/KeyboardSwitcher/FocusContext.swift
     Sources/KeyboardSwitcher/LayoutSwitcher.swift
     Sources/KeyboardSwitcher/Replayer.swift
     Sources/KeyboardSwitcher/EventTap.swift

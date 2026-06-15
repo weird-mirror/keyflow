@@ -73,6 +73,7 @@ final class AppState: ObservableObject {
     func startEventTap() {
         guard axGranted, tap == nil, let coord = coordinator else { return }
         let t = EventTap { event, type in coord.handle(event: event, type: type) }
+        t.onTapDisabled = { [weak coord] in coord?.resetBuffer() }
         do {
             try t.start()
             self.tap = t
@@ -144,6 +145,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             if was && !self.state.axGranted {
                 self.state.stopEventTap()
+            }
+            // Re-arm the tap if the system disabled it while no event came
+            // through to trigger the inline re-enable.
+            if self.state.axGranted {
+                self.state.tap?.rearmIfNeeded()
             }
         }
     }
