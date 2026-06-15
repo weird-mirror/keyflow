@@ -201,7 +201,7 @@ Bug reports and PRs welcome. A few ground rules:
 ## Support
 
 KeyFlow is free and open-source, and will stay that way. If it saves you time
-every day, you can [buy the developer a coffee](https://www.buymeacoffee.com/keyflow).
+every day, you can [buy the developer a coffee](https://buymeacoffee.com/weird_mirror).
 
 ## License
 
