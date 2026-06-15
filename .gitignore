@@ -1,0 +1,13 @@
+.build/
+.swiftpm/
+*.xcodeproj/
+.DS_Store
+Package.resolved
+xcuserdata/
+DerivedData/
+Sources/KeyboardSwitcher/Resources/*.txt
+Sources/KeyboardSwitcher/Resources/*.bloom
+!Sources/KeyboardSwitcher/Resources/sample_*.txt
+
+# Downloaded hunspell source dictionaries (regenerate via scripts/build_dictionaries.py)
+dicts/
