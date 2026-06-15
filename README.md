@@ -58,7 +58,11 @@ last word through the three layouts when the detector is unsure.
 3. Launch from Spotlight (`⌘ Space → "KeyFlow"`).
 4. On first launch macOS will prompt for **Accessibility** permission —
    KeyFlow needs this to read and rewrite keystrokes. Grant it in
-   *System Settings → Privacy & Security → Accessibility*.
+   *System Settings → Privacy & Security → Accessibility* by enabling the
+   toggle next to **KeyFlow.app**:
+
+   ![Granting Accessibility permission to KeyFlow](docs/screenshots/accessibility.png)
+
 5. The app keeps a `⌥` icon in the menu bar. Click it → *Settings…* to
    configure.
 
